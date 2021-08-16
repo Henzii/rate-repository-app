@@ -1,33 +1,45 @@
-import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
-import RepositoryItem from './RepositoryItem';
+import React, { useState } from 'react';
+import { Provider } from 'react-native-paper';
+import { useHistory } from 'react-router-native';
 
 import useRepositories from '../hooks/useRepositories';
+import { RepositoryListContainer } from './RepositoryListContainer';
+import RepositorySortMenu from './RepositorySortMenu';
 
-const styles = StyleSheet.create({
-  separator: {
-    height: 10,
-    backgroundColor: 'lightgray'
-  },
-});
-
-const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
 
-  const { repositories } = useRepositories();
+  const [repositoriesSortVars, setRepositoriesSortVars] = useState(null);
+  const [repositoriesSearchKeyword, setRepositoriesSearchKeyword] = useState(null);
 
-  const repositoryNodes = repositories
-    ? repositories.edges.map(edge => edge.node)
-    : [];
+  const { repositories, fetchMore } = useRepositories({ first: 8, ...repositoriesSortVars}, repositoriesSearchKeyword);
 
+  const history = useHistory();
+
+  const handleSort = (sortVars) => {
+    setRepositoriesSortVars(sortVars);
+  };
+  const handleSearch = (keyword) => {
+    setRepositoriesSearchKeyword((keyword !== '') ? { search: keyword } : null);
+
+  };
+  const handleItemPress = (id) => {
+    history.push(`/repository/${id}`);
+  };
+  const onEndReached = () => {
+    fetchMore();
+    console.log('Welcome to the end');
+  };
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={RepositoryItem}
-    />
-  );
-};
+    <Provider>
+      <RepositorySortMenu handleSort={handleSort} />
+      <RepositoryListContainer
+        repositories={repositories}
+        handleSearch={handleSearch}
+        handleItemPress={handleItemPress}
+        onEndReached={onEndReached}
+      />
+    </Provider>);
 
+};
 export default RepositoryList;

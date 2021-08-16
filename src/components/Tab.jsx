@@ -5,7 +5,7 @@ import React from 'react';
 const Tab = ({ text, to}) => {
     return (
             <Link to={to}>
-                <Text style={{ color: 'lightgray', fontSize: '1.5em' }}>
+                <Text fontWeight="bold" style={{ color: 'lightgray' }}>
                     {text}
                 </Text>
 

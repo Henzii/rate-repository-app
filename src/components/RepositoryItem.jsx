@@ -4,22 +4,27 @@ import { View, StyleSheet, Image } from 'react-native';
 
 import theme from '../theme';
 
+
 const itemStyles = StyleSheet.create(
     {
+        root: {
+            padding: 10,
+        },
         language: {
             color: 'white',
             backgroundColor: theme.colors.primary,
-            padding: '8px',
-            marginBottom: '5px',
-            borderRadius: '5px',
+            padding: 8,
+            marginBottom: 5,
+            borderRadius: 5,
         },
         main: {
             flexDirection: 'row',
-            justifyContent: 'flex-start'
+            justifyContent: 'flex-start',
+            
         },
         header: {
-            flexGrow: '1',
-            display: 'inline-block',
+            flexGrow: 1,
+            display: 'flex',
             minWidth: '70%',
         },
         numbersContainer: {
@@ -33,44 +38,45 @@ const itemStyles = StyleSheet.create(
             justifyContent: 'flex-start'
         },
         image: {
-            width: '50px',
-            height: '50px',
-            margin: '10px'
+            width: 50,
+            height: 50,
+            margin: 10
         }
     }
 );
 const RepositoryItem = ({ item }) => {
+
     return (
-        <View>
-            <View style={itemStyles.mainContainer}>
-                <Image
-                    style={itemStyles.image}
-                    source={{
-                        uri: 'https://via.placeholder.com/50'
-                    }}
-                />
-                <View>
-                    <RepItemHeader
-                        style={itemStyles.header}
-                        title={item.fullName}
-                        subtitle={item.description}
+            <View style={itemStyles.root}>
+                <View style={itemStyles.mainContainer}>
+                    <Image
+                        style={itemStyles.image}
+                        source={{
+                            uri: 'https://via.placeholder.com/50'
+                        }}
                     />
-                    <RepItemLanguage style={itemStyles.language} language={item.language} />
+                    <View>
+                        <RepItemHeader
+                            style={itemStyles.header}
+                            title={item.fullName}
+                            subtitle={item.description}
+                        />
+                        <RepItemLanguage style={itemStyles.language} language={item.language} />
+                    </View>
                 </View>
+                <RepItemNumbers
+                    forks={item.forksCount}
+                    stars={item.stargazersCount}
+                    reviews={item.reviewCount}
+                    rating={item.ratingAverage}
+                />
             </View>
-            <RepItemNumbers
-                forks={item.forksCount}
-                stars={item.stargazersCount}
-                reviews={item.reviewCount}
-                rating={item.ratingAverage}
-            />
-        </View>
     );
 };
 const RepItemNumbersItem = ({ text, data }) => {
     return (
-        <View style={{ flexGrow: '1', alignItems: 'center' }}>
-            <Text fontWeight="bold">{(data >= 1000) ? (data / 1000) + "k" : data}</Text>
+        <View style={{ flexGrow: 1, alignItems: 'center' }}>
+            <Text testID="itemNumbers" fontWeight="bold">{(data >= 1000) ? (data / 1000) + "k" : data}</Text>
             <Text>{text}</Text>
 
         </View>);
@@ -88,15 +94,15 @@ const RepItemNumbers = ({ forks, stars, reviews, rating }) => {
 const RepItemHeader = ({ title, subtitle }) => {
     return (
         <>
-            <Text fontSize="subheading" fontWeight="bold">{title}</Text>
-            <Text fontSize="subheading" color="textSecondary">{subtitle}</Text>
+            <Text testID="itemName" fontSize="subheading" fontWeight="bold">{title}</Text>
+            <Text testID="itemDescription" fontSize="subheading" color="textSecondary">{subtitle}</Text>
         </>
     );
 };
 const RepItemLanguage = ({ language }) => {
     return (
-        <View style={{ display: 'flex', flexDirection: 'row'}}>
-            <Text fontWeight="bold" style={itemStyles.language}>{language}</Text>
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Text testID="itemLanguage" fontWeight="bold" style={itemStyles.language}>{language}</Text>
         </View>
     );
 };
